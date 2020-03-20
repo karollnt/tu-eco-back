@@ -60,8 +60,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   `id_tipo_identidad` INT NOT NULL,
   `id_perfil` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_usuario_tipo_identidad_idx` (`id_tipo_identidad` ASC) VISIBLE,
-  INDEX `fk_usuario_perfil1_idx` (`id_perfil` ASC) VISIBLE,
+  INDEX `fk_usuario_tipo_identidad_idx` (`id_tipo_identidad` ASC),
+  INDEX `fk_usuario_perfil1_idx` (`id_perfil` ASC),
   CONSTRAINT `fk_usuario_tipo_identidad`
     FOREIGN KEY (`id_tipo_identidad`)
     REFERENCES `tueco`.`tipo_identidad` (`id`)
@@ -111,8 +111,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`categoria` (
   `id_tipo` INT NOT NULL,
   `id_medida` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_categoria_tipo_categoria1_idx` (`id_tipo` ASC) VISIBLE,
-  INDEX `fk_categoria_medida1_idx` (`id_medida` ASC) VISIBLE,
+  INDEX `fk_categoria_tipo_categoria1_idx` (`id_tipo` ASC),
+  INDEX `fk_categoria_medida1_idx` (`id_medida` ASC),
   CONSTRAINT `fk_categoria_tipo_categoria1`
     FOREIGN KEY (`id_tipo`)
     REFERENCES `tueco`.`tipo_categoria` (`id`)
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `tueco`.`ciudades` (
   `nombre` VARCHAR(45) NOT NULL DEFAULT '',
   `id_departamento` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX `fk_ciudades_departamento1_idx` (`id_departamento` ASC) VISIBLE,
+  INDEX `fk_ciudades_departamento1_idx` (`id_departamento` ASC),
   CONSTRAINT `fk_ciudades_departamento1`
     FOREIGN KEY (`id_departamento`)
     REFERENCES `tueco`.`departamento` (`iddepartamento`)
@@ -168,12 +168,12 @@ CREATE TABLE IF NOT EXISTS `tueco`.`solicitud` (
   `fecha_recogida` DATETIME NULL DEFAULT NULL,
   `id_solicitante` INT NOT NULL DEFAULT 0,
   `id_reciclatendero` INT NULL DEFAULT 0,
-  `comentario` TEXT NOT NULL DEFAULT '',
+  `comentario` TEXT NOT NULL,
   `ciudades_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_solicitud_usuario1_idx` (`id_solicitante` ASC) VISIBLE,
-  INDEX `fk_solicitud_usuario2_idx` (`id_reciclatendero` ASC) VISIBLE,
-  INDEX `fk_solicitud_ciudades1_idx` (`ciudades_id` ASC) VISIBLE,
+  INDEX `fk_solicitud_usuario1_idx` (`id_solicitante` ASC),
+  INDEX `fk_solicitud_usuario2_idx` (`id_reciclatendero` ASC),
+  INDEX `fk_solicitud_ciudades1_idx` (`ciudades_id` ASC),
   CONSTRAINT `fk_solicitud_usuario1`
     FOREIGN KEY (`id_solicitante`)
     REFERENCES `tueco`.`usuario` (`id`)
@@ -204,8 +204,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`detalle_solicitud` (
   `valor` DECIMAL(10,2) NOT NULL DEFAULT 0,
   `cantidad` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX `fk_detalle_solicitud_solicitud1_idx` (`id_solicitud` ASC) VISIBLE,
-  INDEX `fk_detalle_solicitud_categoria1_idx` (`id_categoria` ASC) VISIBLE,
+  INDEX `fk_detalle_solicitud_solicitud1_idx` (`id_solicitud` ASC),
+  INDEX `fk_detalle_solicitud_categoria1_idx` (`id_categoria` ASC),
   CONSTRAINT `fk_detalle_solicitud_solicitud1`
     FOREIGN KEY (`id_solicitud`)
     REFERENCES `tueco`.`solicitud` (`id`)
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `tueco`.`ruta` (
   `id_reciclatendero` INT NOT NULL DEFAULT 0,
   `comentario` TEXT NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  INDEX `fk_ruta_usuario1_idx` (`id_reciclatendero` ASC) VISIBLE,
+  INDEX `fk_ruta_usuario1_idx` (`id_reciclatendero` ASC),
   CONSTRAINT `fk_ruta_usuario1`
     FOREIGN KEY (`id_reciclatendero`)
     REFERENCES `tueco`.`usuario` (`id`)
@@ -249,8 +249,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`solicitudes_ruta` (
   `id_ruta` INT NOT NULL DEFAULT 0,
   `id_solicitud` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  INDEX `fk_solicitudes_ruta_ruta1_idx` (`id_ruta` ASC) VISIBLE,
-  INDEX `fk_solicitudes_ruta_solicitud1_idx` (`id_solicitud` ASC) VISIBLE,
+  INDEX `fk_solicitudes_ruta_ruta1_idx` (`id_ruta` ASC),
+  INDEX `fk_solicitudes_ruta_solicitud1_idx` (`id_solicitud` ASC),
   CONSTRAINT `fk_solicitudes_ruta_ruta1`
     FOREIGN KEY (`id_ruta`)
     REFERENCES `tueco`.`ruta` (`id`)
