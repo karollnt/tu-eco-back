@@ -26,10 +26,14 @@ class UserModel extends CI_Model {
 			. "usr.direccion, usr.correo, usr.foto, usr.placa";
 		$conditions = array('usr.' . $field => $value);
 		$this->db
-			->select($user_fields . ", ti.nombre AS tipo_id, pf.nombre AS perfil", false)
+			->select($user_fields . ", ti.nombre AS tipo_id, pf.nombre AS perfil, " .
+				"cd.id AS id_ciudad, cd.nombre AS ciudad, " .
+				"dp.id AS id_departamento, dp.nombre AS departamento", false)
 			->from("usuario usr")
 				->join("tipo_identidad ti", "ti.id = usr.id_tipo_identidad", "inner")
 				->join("perfil pf", "pf.id = usr.id_perfil", "inner")
+				->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
+				->join("departamento dp", "dp.id = cd.id_departamento", "inner")
 			->where($conditions);
 		$res = $this->db->get();
 		if ($res->num_rows() == 1) {
@@ -41,5 +45,23 @@ class UserModel extends CI_Model {
 			array_push($users, $row);
 		}
 		return $users;
+	}
+
+	public function get_user_city_id($user_id = null) {
+		if ($this->current_user != null) {
+			return $this->current_user['id_ciudad'];
+		}
+		if ($user_id == null) {
+			return 1;
+		}
+		$this->select("cd.id")
+			->from("usuario usr")
+			->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
+			->where(["usr.id" => $user_id]);
+		$res = $this->db->get();
+		if ($res->num_rows() > 0) {
+			return $res->result()[0];
+		}
+		return 1;
 	}
 }

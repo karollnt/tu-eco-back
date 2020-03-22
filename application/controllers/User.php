@@ -30,7 +30,7 @@ class User extends CI_Controller {
 			die(json_encode(['message' => 'bad request']));
 		}
 		$user = $this->UserModel->search_user('id', $id);
-		if (is_array($user)) {
+		if (count($user) > 1) {
 			die(json_encode(['users' => $user]));
 		}
 		echo(json_encode($user));

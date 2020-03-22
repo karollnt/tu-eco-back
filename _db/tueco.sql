@@ -59,9 +59,11 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   `clave` VARCHAR(45) NOT NULL DEFAULT '',
   `id_tipo_identidad` INT NOT NULL,
   `id_perfil` INT NOT NULL,
+  `id_ciudad` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_usuario_tipo_identidad_idx` (`id_tipo_identidad` ASC),
   INDEX `fk_usuario_perfil1_idx` (`id_perfil` ASC),
+  INDEX `fk_usuario_ciudad1_idx` (`id_ciudad` ASC),
   CONSTRAINT `fk_usuario_tipo_identidad`
     FOREIGN KEY (`id_tipo_identidad`)
     REFERENCES `tueco`.`tipo_identidad` (`id`)
@@ -70,6 +72,11 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   CONSTRAINT `fk_usuario_perfil1`
     FOREIGN KEY (`id_perfil`)
     REFERENCES `tueco`.`perfil` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_usuario_ciudad1`
+    FOREIGN KEY (`id_ciudad`)
+    REFERENCES `tueco`.`ciudad` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
