@@ -57,4 +57,23 @@ class Order extends CI_Controller {
 		$order = $this->OrderModel->get_order_details($order_id);
 		echo(json_encode(['order' => $order]));
 	}
+
+	public function get_unassigned_orders() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$orders = $this->OrderModel->get_unassigned_orders();
+		echo(json_encode(['orders' => $orders]));
+	}
+
+	public function get_user_orders() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$user_id = $this->input->get('user_id');
+		if (strcasecmp($user_id, '') === 0) {
+			http_response_code(400);
+			die(json_encode(['orders' => []]));
+		}
+		$orders = $this->OrderModel->get_user_orders($user_id);
+		echo(json_encode(['orders' => $orders]));
+	}
 }
