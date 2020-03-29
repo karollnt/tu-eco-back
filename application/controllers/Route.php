@@ -28,4 +28,19 @@ class Route extends CI_Controller {
 		$route = $this->RouteModel->get_route_details($route_id);
 		echo(json_encode(['route' => $route]));
 	}
+
+	public function get_all_routes() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$routes = $this->RouteModel->get_all_routes();
+		echo(json_encode(['routes' => $routes]));
+	}
+
+	public function get_date_routes() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$date = $this->input->get('date');
+		$routes = $this->RouteModel->get_date_routes($date);
+		echo(json_encode(['routes' => $routes]));
+	}
 }

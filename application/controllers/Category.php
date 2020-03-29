@@ -12,6 +12,21 @@ class Category extends CI_Controller {
 		echo(json_encode(['categories' => $categories]));
 	}
 
+	public function create_category() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$category_data = [
+			'nombre' => trim($this->input->post('nombre')),
+			'precio' => trim($this->input->post('precio')),
+			'id_tipo' => trim($this->input->post('id_tipo')),
+			'id_medida' => trim($this->input->post('id_medida'))
+		];
+		$response = [
+			'valid' => $this->CategoryModel->create_category($category_data)
+		];
+		echo(json_encode($response));
+	}
+
 	public function get_category_data() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');

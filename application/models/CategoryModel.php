@@ -33,4 +33,9 @@ class CategoryModel extends CI_Model {
 		}
 		return $categories;
 	}
+
+	public function create_category($category_data) {
+		$this->db->insert('usuario', $category_data);
+		return $this->db->affected_rows() > 0;
+	}
 }
