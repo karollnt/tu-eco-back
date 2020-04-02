@@ -34,7 +34,8 @@ class User extends CI_Controller {
 		}
 		$md_pass = md5($clave);
 		$response = [
-			'valid' => $this->UserModel->verify_login($email, $md_pass)
+			'valid' => $this->UserModel->verify_login($email, $md_pass),
+			'id' => $this->UserModel->get_user()->id,
 		];
 		echo(json_encode($response));
 	}
@@ -48,7 +49,7 @@ class User extends CI_Controller {
 			die(json_encode(['message' => 'bad request']));
 		}
 		$user = $this->UserModel->search_user('id', $id);
-		if (count($user) > 1) {
+		if (is_array($user)) {
 			die(json_encode(['users' => $user]));
 		}
 		echo(json_encode($user));

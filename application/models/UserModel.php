@@ -23,6 +23,9 @@ class UserModel extends CI_Model {
 			->from("usuario")
 			->where($conditions);
 		$res = $this->db->get();
+		if ($res->num_rows() == 1) {
+			$this->current_user = $res->result()[0];
+		}
 		return $res->num_rows() > 0;
 	}
 
@@ -33,12 +36,12 @@ class UserModel extends CI_Model {
 		$this->db
 			->select($user_fields . ", ti.nombre AS tipo_id, pf.nombre AS perfil, " .
 				"cd.id AS id_ciudad, cd.nombre AS ciudad, " .
-				"dp.id AS id_departamento, dp.nombre AS departamento", false)
+				"dp.iddepartamento AS id_departamento, dp.nombre AS departamento", false)
 			->from("usuario usr")
 				->join("tipo_identidad ti", "ti.id = usr.id_tipo_identidad", "inner")
 				->join("perfil pf", "pf.id = usr.id_perfil", "inner")
 				->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
-				->join("departamento dp", "dp.id = cd.id_departamento", "inner")
+				->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
 			->where($conditions);
 		$res = $this->db->get();
 		if ($res->num_rows() == 1) {
@@ -83,12 +86,12 @@ class UserModel extends CI_Model {
 		$this->db
 			->select($user_fields . ", ti.nombre AS tipo_id, pf.nombre AS perfil, " .
 				"cd.id AS id_ciudad, cd.nombre AS ciudad, " .
-				"dp.id AS id_departamento, dp.nombre AS departamento", false)
+				"dp.iddepartamento AS id_departamento, dp.nombre AS departamento", false)
 			->from("usuario usr")
 				->join("tipo_identidad ti", "ti.id = usr.id_tipo_identidad", "inner")
 				->join("perfil pf", "pf.id = usr.id_perfil", "inner")
 				->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
-				->join("departamento dp", "dp.id = cd.id_departamento", "inner");
+				->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner");
 		$res = $this->db->get();
 		$users = [];
 		foreach ($res->result() as $row) {

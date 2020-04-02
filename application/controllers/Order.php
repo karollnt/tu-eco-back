@@ -40,7 +40,7 @@ class Order extends CI_Controller {
 			die(json_encode(['orders' => []]));
 		}
 		$order = $this->OrderModel->get_order_data($order_id);
-		if (count($order) > 1) {
+		if (is_array($order)) {
 			die(json_encode(['orders' => $order]));
 		}
 		echo(json_encode($order));
