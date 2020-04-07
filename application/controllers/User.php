@@ -12,14 +12,14 @@ class User extends CI_Controller {
 		$user_data = array(
 			'clave'=>md5($clave),'id_tipo_identidad'=>trim($this->input->post('id_tipo_identidad')),
 			'nombre'=>trim($this->input->post('nombre')), 'apellido'=>trim($this->input->post('apellido')),
-			'telefono'=>trim($this->input->post('telefono')), 'email'=>trim($this->input->post('email')),
+			'telefono'=>trim($this->input->post('telefono')), 'correo'=>trim($this->input->post('email')),
 			'foto'=>trim($this->input->post('foto')), 'placa'=>trim($this->input->post('placa')),
 			'id_perfil'=>trim($this->input->post('id_perfil')), 'id_ciudad'=>trim($this->input->post('id_ciudad')),
 			'identificacion'=>trim($this->input->post('identificacion')),'direccion'=>trim($this->input->post('direccion'))
 		);
 		$response = [
 			'valid' => $this->UserModel->create_user($user_data),
-			'id' => $this->UserModel->get_user()->id,
+			'id' => $this->UserModel->get_user()['id'],
 		];
 		echo(json_encode($response));
 	}
