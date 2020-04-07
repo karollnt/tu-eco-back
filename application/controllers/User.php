@@ -18,7 +18,8 @@ class User extends CI_Controller {
 			'identificacion'=>trim($this->input->post('identificacion')),'direccion'=>trim($this->input->post('direccion'))
 		);
 		$response = [
-			'valid' => $this->UserModel->create_user($user_data)
+			'valid' => $this->UserModel->create_user($user_data),
+			'id' => $this->UserModel->get_user()->id,
 		];
 		echo(json_encode($response));
 	}
@@ -35,7 +36,7 @@ class User extends CI_Controller {
 		$md_pass = md5($clave);
 		$response = [
 			'valid' => $this->UserModel->verify_login($email, $md_pass),
-			'id' => $this->UserModel->get_user()->id,
+			'id' => $this->UserModel->get_user()['id'],
 		];
 		echo(json_encode($response));
 	}

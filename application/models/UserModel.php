@@ -13,6 +13,9 @@ class UserModel extends CI_Model {
 
 	public function create_user($user_data) {
 		$this->db->insert('usuario', $user_data);
+		if ($this->db->affected_rows() > 0) {
+			$this->current_user = ['id' => $this->db->insert_id()];
+		}
 		return $this->db->affected_rows() > 0;
 	}
 
