@@ -37,11 +37,11 @@ class Order extends CI_Controller {
 		$order_id = $this->input->get('order_id');
 		if (strcasecmp($order_id, '') === 0) {
 			http_response_code(400);
-			die(json_encode(['orders' => []]));
+			die(json_encode([]));
 		}
 		$order = $this->OrderModel->get_order_data($order_id);
 		if (is_array($order)) {
-			die(json_encode(['orders' => $order]));
+			die(json_encode($order));
 		}
 		echo(json_encode($order));
 	}
@@ -52,17 +52,17 @@ class Order extends CI_Controller {
 		$order_id = $this->input->get('order_id');
 		if (strcasecmp($order_id, '') === 0) {
 			http_response_code(400);
-			die(json_encode(['orders' => []]));
+			die(json_encode([]));
 		}
 		$order = $this->OrderModel->get_order_details($order_id);
-		echo(json_encode(['order' => $order]));
+		echo(json_encode($order));
 	}
 
 	public function get_unassigned_orders() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
 		$orders = $this->OrderModel->get_unassigned_orders();
-		echo(json_encode(['orders' => $orders]));
+		echo(json_encode($orders));
 	}
 
 	public function get_user_orders() {
@@ -71,9 +71,9 @@ class Order extends CI_Controller {
 		$user_id = $this->input->get('user_id');
 		if (strcasecmp($user_id, '') === 0) {
 			http_response_code(400);
-			die(json_encode(['orders' => []]));
+			die(json_encode([]));
 		}
 		$orders = $this->OrderModel->get_user_orders($user_id);
-		echo(json_encode(['orders' => $orders]));
+		echo(json_encode($orders));
 	}
 }
