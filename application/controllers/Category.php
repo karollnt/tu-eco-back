@@ -9,7 +9,7 @@ class Category extends CI_Controller {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
 		$categories = $this->CategoryModel->get_categories();
-		echo(json_encode(['categories' => $categories]));
+		echo(json_encode($categories));
 	}
 
 	public function create_category() {

@@ -36,7 +36,7 @@ class User extends CI_Controller {
 		$md_pass = md5($clave);
 		$response = [
 			'valid' => $this->UserModel->verify_login($email, $md_pass),
-			'id' => $this->UserModel->get_user()['id'],
+			'id' => $this->UserModel->get_user()->id,
 		];
 		echo(json_encode($response));
 	}
