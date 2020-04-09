@@ -16,7 +16,7 @@ class Order extends CI_Controller {
 			die(json_encode(['valid' => false]));
 		}
 		$comment = utf8_decode($this->input->post('comment'));
-		$city_id = $this->OrderModel->get_user_city_id($user_id);
+		$city_id = $this->UserModel->get_user_city_id($user_id);
 		$categories = explode('|', $this->input->post('categorias'));
 		$categories = array_map(function ($category) {
 			$cat_array = explode(';', $category);

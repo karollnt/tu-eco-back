@@ -65,13 +65,13 @@ class UserModel extends CI_Model {
 		if ($user_id == null) {
 			return 1;
 		}
-		$this->select("cd.id")
+		$this->db->select("cd.id")
 			->from("usuario usr")
 			->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
 			->where(["usr.id" => $user_id]);
 		$res = $this->db->get();
 		if ($res->num_rows() > 0) {
-			return $res->result()[0];
+			return $res->result()[0]->id;
 		}
 		return 1;
 	}
