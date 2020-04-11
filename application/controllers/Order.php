@@ -16,6 +16,7 @@ class Order extends CI_Controller {
 			die(json_encode(['valid' => false]));
 		}
 		$comment = utf8_decode($this->input->post('comment'));
+		$fecha_recogida = utf8_decode($this->input->post('fecha_recogida'));
 		$city_id = $this->UserModel->get_user_city_id($user_id);
 		$categories = explode('|', $this->input->post('categorias'));
 		$categories = array_map(function ($category) {
@@ -24,7 +25,7 @@ class Order extends CI_Controller {
 		}, $categories);
 
 		$valid = $this->OrderModel->create_order($user_id,
-			['comentario' => $comment, 'ciudades_id' => $city_id, 'categorias' => $categories]);
+			['comentario' => $comment, 'ciudades_id' => $city_id, 'fecha_recogida' => $fecha_recogida, 'categorias' => $categories]);
 		if ($valid === false) {
 			http_response_code(400);
 		}

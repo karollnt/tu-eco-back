@@ -8,8 +8,8 @@ class OrderModel extends CI_Model {
 	}
 
 	public function create_order($user_id, $order_data) {
-		$handler = $this->db->query("INSERT INTO `solicitud`(`id_solicitante`,`id_reciclatendero`, `comentario`, `ciudades_id`) " .
-			"VALUES ({$user_id}, null, " . ($this->db->escape($order_data['comentario'])) . ", {$order_data['ciudades_id']})");
+		$handler = $this->db->query("INSERT INTO `solicitud`(`id_solicitante`,`id_reciclatendero`, `comentario`, `ciudades_id`, `fecha`) " .
+			"VALUES ({$user_id}, null, " . ($this->db->escape($order_data['comentario'])) . ", {$order_data['ciudades_id']}, " . ($this->db->escape($order_data['fecha_recogida'])) . ")");
 		$order_id = $this->db->insert_id();
 		if (!$order_id) {
 			return false;
@@ -23,7 +23,7 @@ class OrderModel extends CI_Model {
 
 	public function get_order_data($order_id) {
 		$this->db
-			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, ' .
+			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, sl.fecha_recogida, ' .
 				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, ' .
 				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, dp.nombre AS departamento')
 			->from('solicitud sl')
@@ -81,7 +81,7 @@ class OrderModel extends CI_Model {
 
 	public function get_user_orders($user_id) {
 		$this->db
-			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, ' .
+			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, sl.fecha_recogida, ' .
 				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, ' .
 				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, dp.nombre AS departamento')
 			->from('solicitud sl')
@@ -89,7 +89,8 @@ class OrderModel extends CI_Model {
 			->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
 			->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
 			->join('usuario us2', 'sl.id_reciclatendero = us2.id', 'left')
-			->where(['sl.id_solicitante' => $user_id]);
+			->where(['sl.id_solicitante' => $user_id])
+			->order_by('sl.fecha', 'DESC');
 		$res = $this->db->get();
 		$orders = [];
 		foreach ($res->result() as $row) {
