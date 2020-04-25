@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   `telefono` VARCHAR(45) NOT NULL DEFAULT '',
   `direccion` VARCHAR(45) NOT NULL DEFAULT '',
   `correo` VARCHAR(125) NOT NULL DEFAULT '',
-  `foto` VARCHAR(45) NOT NULL DEFAULT '',
+  `foto` TEXT NOT NULL DEFAULT '',
   `placa` VARCHAR(45) NOT NULL DEFAULT '',
   `clave` VARCHAR(45) NOT NULL DEFAULT '',
   `id_tipo_identidad` INT NOT NULL,
