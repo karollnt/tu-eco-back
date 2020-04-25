@@ -77,9 +77,8 @@ class UserModel extends CI_Model {
 	}
 
 	public function edit_data($user_id, $user_data) {
-		$this->db
-			->update('usuarios', $user_data)
-			->where(['id' => $user_id]);
+		$this->db->where(['id' => $user_id]);
+		$this->db->update('usuario', $user_data);
 		return $this->db->affected_rows() > 0;
 	}
 
