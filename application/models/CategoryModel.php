@@ -5,7 +5,7 @@ class CategoryModel extends CI_Model {
 	}
 
 	public function get_category_data($category_id) {
-		$this->db->select('ct.id, ct.nombre, ct.precio, ct.id_medida, md.nombre AS medida, ct.id_tipo, tp.nombre AS tipo')
+		$this->db->select('ct.id, ct.nombre, ct.precio, ct.id_medida, md.nombre AS medida, ct.id_tipo, tp.nombre AS tipo,ct.foto')
 			->from('categoria ct')
 			->join('medida md', 'md.id = ct.id_medida', 'inner')
 			->join('tipo_categoria tp', 'tp.id = ct.id_tipo', 'inner')
@@ -22,7 +22,7 @@ class CategoryModel extends CI_Model {
 	}
 
 	public function get_categories() {
-		$this->db->select('ct.id, ct.nombre, ct.precio, ct.id_medida, md.nombre AS medida, ct.id_tipo, tp.nombre AS tipo')
+		$this->db->select('ct.id, ct.nombre, ct.precio, ct.id_medida, md.nombre AS medida, ct.id_tipo, tp.nombre AS tipo,ct.foto')
 			->from('categoria ct')
 			->join('medida md', 'md.id = ct.id_medida', 'inner')
 			->join('tipo_categoria tp', 'tp.id = ct.id_tipo', 'inner');
