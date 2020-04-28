@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS `tueco`.`categoria` (
   `precio` DECIMAL(10,2) NOT NULL,
   `id_tipo` INT NOT NULL,
   `id_medida` INT NOT NULL,
+  `foto` VARCHAR(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   INDEX `fk_categoria_tipo_categoria1_idx` (`id_tipo` ASC),
   INDEX `fk_categoria_medida1_idx` (`id_medida` ASC),
