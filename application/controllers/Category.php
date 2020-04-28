@@ -20,6 +20,7 @@ class Category extends CI_Controller {
 			'precio' => trim($this->input->post('precio')),
 			'id_tipo' => trim($this->input->post('id_tipo')),
 			'id_medida' => trim($this->input->post('id_medida'))
+			'foto' => trim($this->input->post('foto')),
 		];
 		$response = [
 			'valid' => $this->CategoryModel->create_category($category_data)
