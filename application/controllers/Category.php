@@ -19,7 +19,7 @@ class Category extends CI_Controller {
 			'nombre' => trim($this->input->post('nombre')),
 			'precio' => trim($this->input->post('precio')),
 			'id_tipo' => trim($this->input->post('id_tipo')),
-			'id_medida' => trim($this->input->post('id_medida'))
+			'id_medida' => trim($this->input->post('id_medida')),
 			'foto' => trim($this->input->post('foto')),
 		];
 		$response = [
