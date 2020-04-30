@@ -101,4 +101,30 @@ class UserModel extends CI_Model {
 		}
 		return $users;
 	}
+
+	public function update_image($user_id, $file_data) {
+		$bucket_name = 'tuecofiles';
+		$file_name = $this->random_str(48) . $file_data['extension'];
+		$file_url = html_entity_decode('https://' . $bucket_name . '.s3.amazonaws.com/' . $file_name);
+		$this->load->library('s3');
+		$bucket = $this->s3->getBucket($bucket_name);
+		if ($bucket === false) {
+			$this->s3->putBucket($bucket_name,'public-read-write');
+		}
+		$putf = $this->s3->putObject($file_data['file'], $bucket_name, $file_name, 'public-read');
+		if ($putf) {
+			return $this->edit_data($user_id, ['foto' => $file_url]);
+		}
+		return false;
+	}
+
+	private function random_str($length) {
+      $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+      $str = '';
+      $max = strlen($keyspace) - 1;
+      for ($i = 0; $i < $length; ++$i) {
+        $str .= $keyspace[rand(0, $max)];
+      }
+      return $str;
+    }
 }

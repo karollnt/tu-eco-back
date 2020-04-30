@@ -107,4 +107,38 @@ class User extends CI_Controller {
 		$users = $this->UserModel->list_users();
 		echo(json_encode(['users' => $users]));
 	}
+
+	public function update_image() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$user_id = trim($this->input->post('user_id'));
+		if (strcasecmp($user_id, '') === 0) {
+			http_response_code(400);
+			die(json_encode(['valid' => false, 'message' => 'bad request']));
+		}
+		$path = './uploads/';
+		$this->load->library('upload');
+		$this->upload->initialize(array(
+			"upload_path"       =>  $path,
+			"allowed_types"     =>  "gif|jpg|png|jpeg|bmp|svg|ico",
+			"max_size"          =>  '20000000',
+			"max_width"         =>  '13684',
+			"max_height"        =>  '13684'
+		));
+		if($this->upload->do_upload('image')) {
+			$image = $this->upload->data();
+			$file_data = [
+				'file' => file_get_contents($image['full_path']),
+				'extension' => $image['file_ext']
+			];
+			$response = [
+				'valid' => $this->UserModel->update_image($user_id, $file_data)
+			];
+			if ($response['valid'] == false) {
+				http_response_code(500);
+			}
+			unlink($image['full_path']);
+			echo(json_encode($response));
+		}
+	}
 }
