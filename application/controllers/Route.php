@@ -43,4 +43,11 @@ class Route extends CI_Controller {
 		$routes = $this->RouteModel->get_date_routes($date);
 		echo(json_encode(['routes' => $routes]));
 	}
+
+	public function obtain_routes() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$routes = [];
+		echo(json_encode(['routes' => $routes]));
+	}
 }

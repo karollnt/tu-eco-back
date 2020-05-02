@@ -21,7 +21,7 @@ class RouteModel extends CI_Model {
 	}
 
 	public function get_route_details($route_id) {
-		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado')
+		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, rt.id_reciclatendero er.nombre AS estado')
 		->from('routes rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
 		->where(['rt.id' => $route_id]);
@@ -39,6 +39,10 @@ class RouteModel extends CI_Model {
 		->join('solicitud sl', 'sl.id = rt.id_solicitud', 'inner')
 		->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
 		->where(['rt.id_ruta' => $route_id]);
+		$details['orders'] = array_map(function ($row) {
+			return $row;
+		}, $res->result());
+		return $details;
 	}
 
 	public function get_all_routes() {
