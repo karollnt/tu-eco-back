@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'tueco',
+	'hostname' => 'db4free.net',
+	'username' => 'tuecosql',
+	'password' => 'BPEq74JzgAFdGrW',
+	'database' => 'tuecobd',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
