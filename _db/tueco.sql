@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   `id_tipo_identidad` INT NOT NULL,
   `id_perfil` INT NOT NULL,
   `id_ciudad` INT NOT NULL,
+  `reset_token` VARCHAR(45) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   INDEX `fk_usuario_tipo_identidad_idx` (`id_tipo_identidad` ASC),
   INDEX `fk_usuario_perfil1_idx` (`id_perfil` ASC),
