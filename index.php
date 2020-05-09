@@ -316,7 +316,11 @@ switch (ENVIRONMENT)
 require_once BASEPATH . 'dotenv/autoloader.php';
 
 $dotenv = new Dotenv\Dotenv(__DIR__);
-$dotenv->load();
+$filePath = rtrim(__DIR__, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR . '.env';
+//both calls are cached so (almost) no performance loss
+if(is_file($filePath) && is_readable($filePath)) {
+    $dotenv->load();
+}
 
 /*
  * --------------------------------------------------------------------

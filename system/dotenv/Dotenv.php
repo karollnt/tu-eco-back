@@ -31,8 +31,7 @@ class Dotenv
 				$file = '.env';
 			}
         }
-		$this->filePath = $this->getFilePath($path, $file);
-		echo($this->filePath);
+        $this->filePath = $this->getFilePath($path, $file);
     }
 
     /**
@@ -73,7 +72,7 @@ class Dotenv
             $file = '.env';
         }
 
-        $filePath = $file;
+        $filePath = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;
 
         return $filePath;
     }
