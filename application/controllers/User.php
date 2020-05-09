@@ -141,4 +141,110 @@ class User extends CI_Controller {
 			echo(json_encode($response));
 		}
 	}
+
+	public function process_forgot_email() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$email = $this->input->post('email');
+		if (strcasecmp($email, '') === 0) {
+			http_response_code(400);
+			die(json_encode(['valid' => false, 'message' => 'bad request']));
+		}
+		$user = $this->UserModel->search_user('correo', $email);
+		if (is_array($user) && count($user) == 0) {
+			http_response_code(400);
+			die(json_encode(['valid' => false, 'message' => 'data not found']));
+		}
+		$token = $this->generate_reset_token($user->id);
+		$response = [
+			'valid' => $this->send_reset_email($email, $token)
+		];
+		echo(json_encode($response));
+	}
+
+	public function reset_password() {
+		$token = $this->input->get('token');
+		if (!isset($token) || ! file_exists(APPPATH.'views/pages/reset-password.php')) {
+			show_404();
+		}
+		$data['token'] = $token;
+		$this->load->view('pages/reset-password', $data);
+	}
+
+	public function update_reset_password() {
+		$token = $this->input->post('token');
+		$password = $this->input->post('password');
+		if (!isset($token)) {
+			$data['response'] = 'No es posible actualizar la clave en este momento';
+		} else {
+			$user = $this->UserModel->search_user('reset_token', $token);
+			if (is_array($user) && count($user) == 0) {
+				$data['response'] = 'No es posible actualizar la clave en este momento';
+			} else {
+				$was_updated = $this->UserModel->edit_data($user->id, ['clave' => md5($password), 'reset_token' => '']);
+				$text = 'Se ha restablecido su clave';
+				if (!$was_updated) {
+					$text = 'No se pudo restablecer su clave';
+				}
+				$data['response'] = $text;
+			}
+		}
+		$this->load->view('pages/reset-password', $data);
+	}
+
+	private function random_str($length) {
+		$keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_';
+		$str = '';
+		$max = strlen($keyspace) - 1;
+		for ($i = 0; $i < $length; ++$i) {
+			$str .= $keyspace[rand(0, $max)];
+		}
+		return $str;
+    }
+
+	private function generate_reset_token($user_id) {
+		$token = $this->random_str(24);
+		$was_updated = $this->UserModel->edit_data($user_id, ['reset_token' => $token]);
+		return $token;
+	}
+
+	private function send_reset_email($email, $token) {
+		$subject = 'Restablecer clave';
+		$from = 'noreply-tueco@yopmail.com';
+		$link = 'https://tueco.herokuapp.com/user/reset_password/?token=' . $token;
+		$message = "Hola!<br>Puedes restablecer tu clave en el siguiente enlace:<br>{$link}";
+		$api_key = getenv('sendgrid_api_key');
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "https://api.sendgrid.com/v3/mail/send",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"to\":[{\"email\":\"{$email}\"}],\"subject\":\"{$subject}\"}],\"from\":{\"email\":\"{$from}\",\"name\":\"Waoo Technology\"},\"content\":[{\"type\":\"text/html\",\"value\":\"{$message}\"}]}",
+			CURLOPT_HTTPHEADER => array(
+				"authorization: Bearer {$api_key}",
+				"content-type: application/json"
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+			// echo "cURL Error #:" . $err;
+			return false;
+		}
+		$json = json_decode($response);
+		if (isset($json->errors)) {
+			var_dump($json);
+			return false;
+		}
+		return true;
+	}
 }
