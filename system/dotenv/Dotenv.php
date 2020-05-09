@@ -32,7 +32,7 @@ class Dotenv
 			}
         }
 		$this->filePath = $this->getFilePath($path, $file);
-		var_dump($this->filePath);
+		echo($this->filePath);
     }
 
     /**
