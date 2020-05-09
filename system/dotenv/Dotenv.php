@@ -31,7 +31,8 @@ class Dotenv
 				$file = '.env';
 			}
         }
-        $this->filePath = $this->getFilePath($path, $file);
+		$this->filePath = $this->getFilePath($path, $file);
+		var_dump($this->filePath);
     }
 
     /**
