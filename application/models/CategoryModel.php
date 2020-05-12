@@ -21,11 +21,14 @@ class CategoryModel extends CI_Model {
 		return $categories;
 	}
 
-	public function get_categories() {
+	public function get_categories($category_type = null) {
 		$this->db->select('ct.id, ct.nombre, ct.precio, ct.id_medida, md.nombre AS medida, ct.id_tipo, tp.nombre AS tipo,ct.foto')
 			->from('categoria ct')
 			->join('medida md', 'md.id = ct.id_medida', 'inner')
 			->join('tipo_categoria tp', 'tp.id = ct.id_tipo', 'inner');
+		if ($category_type != null) {
+			$this->db->where(['id_tipo' => $category_type]);
+		}
 		$res = $this->db->get();
 		$categories = [];
 		foreach ($res->result() as $row) {

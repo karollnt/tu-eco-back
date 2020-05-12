@@ -8,7 +8,9 @@ class Category extends CI_Controller {
 	public function get_categories() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
-		$categories = $this->CategoryModel->get_categories();
+		$category_type = $this->input->get('tipo');
+		$category_type = isset($category_type) ? $category_type : null;
+		$categories = $this->CategoryModel->get_categories($category_type);
 		echo(json_encode($categories));
 	}
 
