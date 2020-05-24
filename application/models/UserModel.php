@@ -19,8 +19,11 @@ class UserModel extends CI_Model {
 		return $this->db->affected_rows() > 0;
 	}
 
-	public function verify_login($email, $passwd) {
+	public function verify_login($email, $passwd, $type = null) {
 		$conditions = array('correo' => $email, 'clave' => $passwd);
+		if ($type != null) {
+			$conditions['id_perfil'] = $type;
+		}
 		$this->db
 			->select("id", false)
 			->from("usuario")

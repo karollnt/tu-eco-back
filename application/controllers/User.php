@@ -28,6 +28,10 @@ class User extends CI_Controller {
 		ob_start( 'ob_gzhandler' );
 		$email = trim($this->input->post('correo'));
 		$clave = trim($this->input->post('clave'));
+		$tipo = trim($this->input->post('tipo'));
+		if (!isset($tipo) || strcasecmp('', $tipo) == 0) {
+			$tipo = null;
+		}
 		header('Content-Type: application/json');
 		if (strcasecmp($email, '') === 0) {
 			http_response_code(400);
@@ -35,7 +39,7 @@ class User extends CI_Controller {
 		}
 		$md_pass = md5($clave);
 		$response = [
-			'valid' => $this->UserModel->verify_login($email, $md_pass),
+			'valid' => $this->UserModel->verify_login($email, $md_pass, $tipo),
 			'id' => $this->UserModel->get_user()->id,
 		];
 		echo(json_encode($response));
