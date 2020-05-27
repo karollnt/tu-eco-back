@@ -38,7 +38,29 @@ class CategoryModel extends CI_Model {
 	}
 
 	public function create_category($category_data) {
-		$this->db->insert('usuario', $category_data);
+		$this->db->insert('categoria', $category_data);
 		return $this->db->affected_rows() > 0;
+	}
+
+	public function get_measurements() {
+		$this->db->select('id, nombre')
+		->from('medida');
+		$res = $this->db->get();
+		$categories = [];
+		foreach ($res->result() as $row) {
+			array_push($categories, $row);
+		}
+		return $categories;
+	}
+
+	public function get_category_types() {
+		$this->db->select('id, nombre')
+		->from('tipo_categoria');
+		$res = $this->db->get();
+		$categories = [];
+		foreach ($res->result() as $row) {
+			array_push($categories, $row);
+		}
+		return $categories;
 	}
 }

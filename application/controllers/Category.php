@@ -41,4 +41,18 @@ class Category extends CI_Controller {
 		$category = $this->CategoryModel->get_category_details($category_id);
 		echo(json_encode(['category' => $category]));
 	}
+
+	public function get_measurements() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$response = $this->CategoryModel->get_measurements();
+		echo(json_encode($response));
+	}
+
+	public function get_category_types() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$response = $this->CategoryModel->get_category_types();
+		echo(json_encode($response));
+	}
 }
