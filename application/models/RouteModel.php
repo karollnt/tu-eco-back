@@ -9,7 +9,7 @@ class RouteModel extends CI_Model {
 
 	public function get_user_routes($user_id) {
 		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado')
-		->from('routes rt')
+		->from('ruta rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
 		->where(['rt.id_reciclatendero' => $user_id]);
 		$res = $this->db->get();
@@ -22,7 +22,7 @@ class RouteModel extends CI_Model {
 
 	public function get_route_details($route_id) {
 		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, rt.id_reciclatendero er.nombre AS estado')
-		->from('routes rt')
+		->from('ruta rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
 		->where(['rt.id' => $route_id]);
 		$res = $this->db->get();
@@ -47,7 +47,7 @@ class RouteModel extends CI_Model {
 
 	public function get_all_routes() {
 		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado')
-		->from('routes rt')
+		->from('ruta rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner');
 		$res = $this->db->get();
 		$routes = [];
@@ -59,7 +59,7 @@ class RouteModel extends CI_Model {
 
 	public function get_date_routes($date) {
 		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado')
-		->from('routes rt')
+		->from('ruta rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
 		->where(['rt.fecha_creacion' => $date]);
 		$res = $this->db->get();
