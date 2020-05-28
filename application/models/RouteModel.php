@@ -21,7 +21,7 @@ class RouteModel extends CI_Model {
 	}
 
 	public function get_route_details($route_id) {
-		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, rt.id_reciclatendero er.nombre AS estado')
+		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, rt.id_reciclatendero, er.nombre AS estado')
 		->from('ruta rt')
 		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
 		->where(['rt.id' => $route_id]);
