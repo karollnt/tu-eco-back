@@ -34,11 +34,16 @@ class RouteModel extends CI_Model {
 				return $row;
 			}, $res->result())
 		];
-		$this->db->select('sl.id, sl.fecha, sl.comentario, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente')
+		$this->db->select('sl.id, sl.fecha, sl.fecha_recogida, sl.comentario, sl.id_solicitante, ' .
+			'us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, '.
+			'sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, dp.nombre AS departamento')
 		->from('solicitudes_ruta rt')
 		->join('solicitud sl', 'sl.id = rt.id_solicitud', 'inner')
 		->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
+		->join("ciudades cd", "cd.id = sl.ciudades_id", "inner")
+		->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
 		->where(['rt.id_ruta' => $route_id]);
+		$res = $this->db->get();
 		$details['orders'] = array_map(function ($row) {
 			return $row;
 		}, $res->result());
