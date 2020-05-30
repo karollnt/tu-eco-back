@@ -77,4 +77,16 @@ class Order extends CI_Controller {
 		$orders = $this->OrderModel->get_user_orders($user_id);
 		echo(json_encode($orders));
 	}
+
+	public function set_as_completed() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$order_id = $this->input->post('order_id');
+		if (strcasecmp($order_id, '') === 0) {
+			http_response_code(400);
+			die(json_encode(['valid' => false]));
+		}
+		$valid = $this->OrderModel->set_as_completed($order_id);
+		echo(json_encode(['valid' => $valid]));
+	}
 }
