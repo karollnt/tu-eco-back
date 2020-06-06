@@ -108,6 +108,42 @@ class OrderModel extends CI_Model {
 		];
 		$this->db->where(['id' => $order_id]);
 		$this->db->update('solicitud', $data);
+		$route_id = $this->get_order_route_id($order_id);
+		$this->update_route_status($route_id);
 		return $this->db->affected_rows() > 0;
+	}
+
+	public function get_order_route_id($order_id) {
+		$this->db->select('sr.id_ruta')
+			->from('solicitudes_ruta sr')
+			->join('solicitud sl', 'sl.id = sr.id_solicitud')
+			->where(['sl.id' => $order_id]);
+		$res = $this->db->get();
+		$routes = [];
+		foreach ($res->result() as $row) {
+			array_push($routes, $row);
+		}
+		return $routes[0]->id_ruta;
+	}
+
+	public function update_route_status($route_id) {
+		$this->db->select('sl.id, sl.id_estado_solicitud')
+			->from('solicitudes_ruta sr')
+			->join('solicitud sl', 'sl.id = sr.id_solicitud')
+			->where(['sr.id_ruta' => $route_id]);
+		$res = $this->db->get();
+		$order_status = [];
+		foreach ($res->result() as $row) {
+			if ( in_array($row->id_estado_solicitud, $order_status) ) {
+				continue;
+			}
+			array_push($order_status, $row->id_estado_solicitud * 1);
+		}
+		if (count($order_status) == 1 && $order_status[0] == 3) {
+			$this->db->where(['id' => $route_id]);
+			$this->db->update('ruta', ['id_estado' => 1]);
+			return true;
+		}
+		return false;
 	}
 }

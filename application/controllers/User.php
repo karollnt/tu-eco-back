@@ -21,6 +21,9 @@ class User extends CI_Controller {
 			'valid' => $this->UserModel->create_user($user_data),
 			'id' => $this->UserModel->get_user()['id'],
 		];
+		if ($response['valid'] == true) {
+			$this->update_user_image($response['id']);
+		}
 		echo(json_encode($response));
 	}
 
@@ -120,6 +123,10 @@ class User extends CI_Controller {
 			http_response_code(400);
 			die(json_encode(['valid' => false, 'message' => 'bad request']));
 		}
+		$this->update_user_image($user_id);
+	}
+
+	private function update_user_image($user_id) {
 		$path = './uploads/';
 		$this->load->library('upload');
 		$this->upload->initialize(array(
