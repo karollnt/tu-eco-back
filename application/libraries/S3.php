@@ -1257,6 +1257,8 @@ class S3 {
 	}
 }
 
+S3::setAuth(getenv('S3_KEY'), getenv('S3_SECRET'));
+
 final class S3Request {
 
 	private $verb, $bucket, $uri, $resource = '', $parameters = array(),
