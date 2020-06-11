@@ -1,4 +1,7 @@
 <?php
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
 class UserModel extends CI_Model {
 	protected $current_user;
 
@@ -109,16 +112,27 @@ class UserModel extends CI_Model {
 		$bucket_name = 'tuecofiles';
 		$file_name = $this->random_str(48) . $file_data['extension'];
 		$file_url = html_entity_decode('https://' . $bucket_name . '.s3.amazonaws.com/' . $file_name);
-
-		$this->load->library('s3');
-		$bucket = $this->s3->getBucket($bucket_name);
-		if ($bucket === false) {
-			$this->s3->putBucket($bucket_name,'public-read-write');
-		}
-
-		$putf = $this->s3->putObject($file_data['file'], $bucket_name, $file_name, 'public-read');
-		if ($putf) {
+		$s3 = new S3Client([
+			'version' => 'latest',
+			'region'  => 'us-east-2',
+			'credentials' => [
+				'key' => getenv('S3_KEY'),
+				'secret' => getenv('S3_SECRET')
+			]
+		]);
+		try {
+			$result = $s3->putObject([
+				'Bucket' => $bucket_name,
+				'Key'    => $file_name,
+				'ACL'    => 'public-read',
+				'Body'   => $file_data['file'],
+				//'SourceFile' => 'c:\samplefile.png' -- use this if you want to upload a file from a local location
+			]);
+			$file_url = $result['ObjectURL'];
 			return $this->edit_data($user_id, ['foto' => $file_url]);
+		} catch (S3Exception $e) {
+			echo $e->getMessage() . PHP_EOL;
+			return false;
 		}
 		return false;
 	}
@@ -131,5 +145,5 @@ class UserModel extends CI_Model {
 			$str .= $keyspace[rand(0, $max)];
 		}
 		return $str;
-    }
+	}
 }
