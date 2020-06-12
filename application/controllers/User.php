@@ -222,7 +222,7 @@ class User extends CI_Controller {
 	private function send_reset_email($email, $token) {
 		$subject = 'Restablecer clave';
 		$from = 'noreply-tueco@yopmail.com';
-		$link = 'https://tu-eco-back.herokuapp.com//user/reset_password/?token=' . $token;
+		$link = 'https://tu-eco-back.herokuapp.com/user/reset_password/?token=' . $token;
 		$message = "Hola!<br>Puedes restablecer tu clave en el siguiente enlace:<br>{$link}";
 		$api_key = getenv('sendgrid_api_key');
 		$curl = curl_init();
