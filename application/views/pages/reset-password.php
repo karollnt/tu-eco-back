@@ -19,7 +19,7 @@
     if (isset($token)) {
     ?>
     <h3>Restablecer clave</h3>
-    <form action="https://localhost/tu-eco-back/user/update_reset_password" method="post">
+    <form action="/user/update_reset_password" method="post">
       <div>
         <label>
           <span>Nueva clave</span><br>
