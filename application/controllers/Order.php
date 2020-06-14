@@ -24,8 +24,15 @@ class Order extends CI_Controller {
 			return ['id_categoria' => $cat_array[0], 'valor' => $cat_array[1], 'cantidad' => $cat_array[2]];
 		}, $categories);
 
-		$valid = $this->OrderModel->create_order($user_id,
-			['comentario' => $comment, 'ciudades_id' => $city_id, 'fecha_recogida' => $fecha_recogida, 'categorias' => $categories]);
+		$valid = $this->OrderModel->create_order(
+			$user_id,
+			[
+				'comentario' => $comment, 'ciudades_id' => $city_id,
+				'fecha_recogida' => $fecha_recogida, 'categorias' => $categories,
+				'latitude' => trim($this->input->post('latitude')),
+				'longitude' => trim($this->input->post('longitude'))
+			]
+		);
 		if ($valid === false) {
 			http_response_code(400);
 		}

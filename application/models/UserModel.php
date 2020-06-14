@@ -146,4 +146,19 @@ class UserModel extends CI_Model {
 		}
 		return $str;
 	}
+
+	public function get_user_coordinates($user_id) {
+		if ($user_id == null) {
+			return ['latitude' => 0, 'longitude' => 0];
+		}
+		$this->db->select("usr.latitude, usr.longitude")
+			->from("usuario usr")
+			->where(["usr.id" => $user_id]);
+		$res = $this->db->get();
+		if ($res->num_rows() > 0) {
+			$row = $res->result()[0];
+			return ['latitude' => $row->latitude, 'longitude' => $row->longitude];
+		}
+		return ['latitude' => 0, 'longitude' => 0];
+	}
 }

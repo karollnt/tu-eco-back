@@ -8,8 +8,11 @@ class OrderModel extends CI_Model {
 	}
 
 	public function create_order($user_id, $order_data) {
-		$handler = $this->db->query("INSERT INTO `solicitud`(`id_solicitante`,`id_reciclatendero`, `comentario`, `ciudades_id`, `fecha`) " .
-			"VALUES ({$user_id}, null, " . ($this->db->escape($order_data['comentario'])) . ", {$order_data['ciudades_id']}, " . ($this->db->escape($order_data['fecha_recogida'])) . ")");
+		$handler = $this->db->query("INSERT INTO `solicitud`(`id_solicitante`,`id_reciclatendero`, `comentario`, `ciudades_id`, `fecha`, `latitude`, `longitude`) " .
+			"VALUES ({$user_id}, null, " . ($this->db->escape($order_data['comentario'])) . ",
+				{$order_data['ciudades_id']}, " . ($this->db->escape($order_data['fecha_recogida'])) .
+				", {$order_data['latitude']}, {$order_data['longitude']}" .
+			")");
 		$order_id = $this->db->insert_id();
 		if (!$order_id) {
 			return false;

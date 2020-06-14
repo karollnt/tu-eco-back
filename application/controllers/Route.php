@@ -59,4 +59,19 @@ class Route extends CI_Controller {
 		$routes = $this->RouteModel->get_user_routes($user_id);
 		echo(json_encode(['routes' => $routes]));
 	}
+
+	public function geolocate_routes() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$latitude = trim($this->input->get('latitude'));
+		$longitude = trim($this->input->get('longitude'));
+		$user_id = trim($this->input->get('user_id'));
+		$position = [
+			'latitude' => $latitude,
+			'longitude' => $longitude,
+		];
+		$this->UserModel->edit_data($user_id, $position);
+		$routes = $this->RouteModel->calculate_nearest_routes($latitude, $longitude);
+		echo(json_encode(['routes' => $routes]));
+	}
 }

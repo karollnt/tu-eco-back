@@ -194,6 +194,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`solicitud` (
   `comentario` TEXT NOT NULL,
   `ciudades_id` INT NOT NULL DEFAULT 1,
   `id_estado_solicitud` INT NOT NULL DEFAULT 1,
+  `latitude` FLOAT NULL DEFAULT 0,
+  `longitude` FLOAT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   INDEX `fk_solicitud_usuario1_idx` (`id_solicitante` ASC),
   INDEX `fk_solicitud_usuario2_idx` (`id_reciclatendero` ASC),
