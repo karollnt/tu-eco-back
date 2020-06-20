@@ -115,6 +115,14 @@ class User extends CI_Controller {
 		echo(json_encode(['users' => $users]));
 	}
 
+	public function list_users_by_type() {
+		$type = trim($this->input->post('type'));
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$users = $this->UserModel->list_users_by_type($type);
+		echo(json_encode(['users' => $users]));
+	}
+
 	public function update_image() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');

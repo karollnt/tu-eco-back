@@ -271,7 +271,7 @@ DROP TABLE IF EXISTS `tueco`.`ruta` ;
 CREATE TABLE IF NOT EXISTS `tueco`.`ruta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `id_reciclatendero` INT NOT NULL DEFAULT 0,
+  `id_reciclatendero` INT NULL,
   `comentario` TEXT NOT NULL DEFAULT '',
   `id_estado` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),

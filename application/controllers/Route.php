@@ -74,4 +74,33 @@ class Route extends CI_Controller {
 		$routes = $this->RouteModel->calculate_nearest_routes($latitude, $longitude);
 		echo(json_encode(['routes' => $routes]));
 	}
+
+	public function assign_route() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$route_id = $this->input->post('idruta');
+		$user_id = $this->input->post('idreciclador');
+		$valid = $this->RouteModel->assign_route($route_id, $user_id);
+		$this->RouteModel->assign_route_orders($route_id, $user_id);
+		if ($valid == false) {
+			http_response_code(400);
+		}
+		echo(json_encode(['valid' => $valid]));
+	}
+
+	public function create_route() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$comment = $this->input->post('comentario');
+		$orders = $this->input->post('solicitudes');
+		if (count($orders) < 1) {
+			http_response_code(400);
+			die(json_encode(['valid' => false]));
+		}
+		$valid = $this->RouteModel->create_route($comment, $orders);
+		if ($valid == false) {
+			http_response_code(400);
+		}
+		echo(json_encode(['valid' => $valid]));
+	}
 }

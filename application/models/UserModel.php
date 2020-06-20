@@ -108,6 +108,27 @@ class UserModel extends CI_Model {
 		return $users;
 	}
 
+	public function list_users_by_type($type = 1) {
+		$user_fields = "usr.id, usr.nombre, usr.apellido, usr.identificacion, usr.telefono, "
+			. "usr.direccion, usr.correo, usr.foto, usr.placa";
+		$this->db
+			->select($user_fields . ", ti.nombre AS tipo_id, pf.nombre AS perfil, " .
+				"cd.id AS id_ciudad, cd.nombre AS ciudad, " .
+				"dp.iddepartamento AS id_departamento, dp.nombre AS departamento", false)
+			->from("usuario usr")
+				->join("tipo_identidad ti", "ti.id = usr.id_tipo_identidad", "inner")
+				->join("perfil pf", "pf.id = usr.id_perfil", "inner")
+				->join("ciudades cd", "cd.id = usr.id_ciudad", "inner")
+				->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
+			->where(['id_perfil' => $type]);
+		$res = $this->db->get();
+		$users = [];
+		foreach ($res->result() as $row) {
+			array_push($users, $row);
+		}
+		return $users;
+	}
+
 	public function update_image($user_id, $file_data) {
 		$bucket_name = 'tuecofiles';
 		$file_name = $this->random_str(48) . $file_data['extension'];

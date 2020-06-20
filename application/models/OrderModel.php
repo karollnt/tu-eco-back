@@ -68,7 +68,9 @@ class OrderModel extends CI_Model {
 		$this->db
 			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, ' .
 				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, ' .
-				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, dp.nombre AS departamento')
+				'us.direccion, ' .
+				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, ' .
+				'dp.nombre AS departamento')
 			->from('solicitud sl')
 			->join("ciudades cd", "cd.id = sl.ciudades_id", "inner")
 			->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
@@ -144,7 +146,7 @@ class OrderModel extends CI_Model {
 		}
 		if (count($order_status) == 1 && $order_status[0] == 3) {
 			$this->db->where(['id' => $route_id]);
-			$this->db->update('ruta', ['id_estado' => 1]);
+			$this->db->update('ruta', ['id_estado' => 3]);
 			return true;
 		}
 		return false;

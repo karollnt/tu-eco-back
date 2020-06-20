@@ -51,9 +51,11 @@ class RouteModel extends CI_Model {
 	}
 
 	public function get_all_routes() {
-		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado')
+		$this->db->select('rt.id, rt.fecha_creacion, rt.comentario, er.nombre AS estado, ' .
+			'rt.id_reciclatendero, us.nombre, us.apellido')
 		->from('ruta rt')
-		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner');
+		->join('estado_ruta er', 'er.id = rt.id_estado', 'inner')
+		->join('usuario us', 'rt.id_reciclatendero = us.id', 'left');
 		$res = $this->db->get();
 		$routes = [];
 		foreach ($res->result() as $row) {
@@ -153,5 +155,26 @@ class RouteModel extends CI_Model {
 			array_push($orders, $row);
 		}
 		return $orders;
+	}
+
+	public function assign_route($route_id, $user_id) {
+		$this->db->where(['id' => $route_id]);
+		$this->db->update('ruta', ['id_reciclatendero' => $user_id, 'id_estado' => 2]);
+		return $this->db->affected_rows() > 0;
+	}
+
+	public function assign_route_orders($route_id, $user_id) {
+		$this->db->where('sl.id IN (SELECT sr.id_solicitud FROM solicitudes_ruta sr WHERE sr.id_ruta = ' . $route_id . ') AND sl.id_solicitante <> 0');
+		$this->db->update('solicitud sl', ['sl.id_reciclatendero' => $user_id, 'sl.id_estado_solicitud' => 2]);
+	}
+
+	public function create_route($comment, $orders) {
+		$this->db->insert('ruta', ['comentario' => $comment, 'id_estado' => 1]);
+		$created = $this->db->affected_rows() > 0;
+		$route_id = $this->db->insert_id();
+		foreach ($orders as $order) {
+			$this->db->insert('solicitudes_ruta', ['id_ruta' => $route_id, 'id_solicitud' => $order]);
+		}
+		return $created;
 	}
 }
