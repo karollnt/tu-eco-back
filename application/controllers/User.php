@@ -26,6 +26,19 @@ class User extends CI_Controller {
 		}
 		echo(json_encode($response));
 	}
+	
+	public function borrarUsuario(){
+			$mensaje = "";
+			$usuario = trim($this->input->post('id'));
+			if($usuario!=''){
+				$mensaje = $this->UsuariosModel->borrarUsuario($usuario);
+			}
+			else{
+				$mensaje = $this->errores['usuiv'];
+			}
+			$resp = array("msg"=>html_entity_decode($mensaje));
+			echo json_encode($resp);
+		}
 
 	public function login() {
 		ob_start( 'ob_gzhandler' );
