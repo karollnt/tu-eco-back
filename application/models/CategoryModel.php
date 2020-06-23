@@ -41,6 +41,16 @@ class CategoryModel extends CI_Model {
 		$this->db->insert('categoria', $category_data);
 		return $this->db->affected_rows() > 0;
 	}
+	
+	public function borrar_categoria($id){
+			$mensaje = '';
+			$this->db->where('id',$id);
+			$this->db->update('categoria',array("estado"=>0));
+			if($this->db->affected_rows()>0) $mensaje = "Informaci&oacute;n actualizada";
+			else $mensaje = "No se pudo actualizar la informaci&oacute;n";
+			return $mensaje;
+		}
+	
 
 	public function get_measurements() {
 		$this->db->select('id, nombre')
