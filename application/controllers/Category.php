@@ -45,6 +45,15 @@ class Category extends CI_Controller {
 		$category = $this->CategoryModel->get_category_details($category_id);
 		echo(json_encode(['category' => $category]));
 	}
+	
+	
+	public function borrar_categoria(){
+			$mensaje = "";
+			$id = $this->input->post('id');
+			$mensaje = $this->CategoryModel->borrar_categoria($id);
+			$resp = array("msg"=>html_entity_decode($mensaje));
+			echo json_encode($resp);
+		}
 
 	public function get_measurements() {
 		ob_start( 'ob_gzhandler' );
