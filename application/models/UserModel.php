@@ -21,18 +21,16 @@ class UserModel extends CI_Model {
 		}
 		return $this->db->affected_rows() > 0;
 	}
-	
-	
-	public function borrarUsuario($usuario){
-			$mensaje = "";
-			$this->db->where('id',$usuario);
-			$this->db->delete('usuarios');
-			if($this->db->affected_rows()>0) $mensaje = "Informaci&oacute;n actualizada";
-			else $mensaje = "No se pudo actualizar la informaci&oacute;n";
-			return $mensaje;
-		}
 
-	
+
+	public function borrarUsuario($usuario){
+		$mensaje = "";
+		$this->db->where('id',$usuario);
+		$this->db->delete('usuario');
+		if($this->db->affected_rows()>0) $mensaje = "Informaci&oacute;n actualizada";
+		else $mensaje = "No se pudo actualizar la informaci&oacute;n";
+		return $mensaje;
+	}
 
 	public function verify_login($email, $passwd, $type = null) {
 		$conditions = array('correo' => $email, 'clave' => $passwd);

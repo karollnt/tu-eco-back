@@ -1,4 +1,7 @@
 <?php
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
 class User extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
@@ -9,11 +12,12 @@ class User extends CI_Controller {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
 		$clave = trim($this->input->post('clave'));
+		$picture = $this->upload_user_image();
 		$user_data = array(
 			'clave'=>md5($clave),'id_tipo_identidad'=>trim($this->input->post('id_tipo_identidad')),
 			'nombre'=>trim($this->input->post('nombre')), 'apellido'=>trim($this->input->post('apellido')),
 			'telefono'=>trim($this->input->post('telefono')), 'correo'=>trim($this->input->post('email')),
-			'foto'=>trim($this->input->post('foto')), 'placa'=>trim($this->input->post('placa')),
+			'foto'=> $picture, 'placa'=>trim($this->input->post('placa')),
 			'id_perfil'=>trim($this->input->post('id_perfil')), 'id_ciudad'=>trim($this->input->post('id_ciudad')),
 			'identificacion'=>trim($this->input->post('identificacion')),'direccion'=>trim($this->input->post('direccion'))
 		);
@@ -22,23 +26,74 @@ class User extends CI_Controller {
 			'id' => $this->UserModel->get_user()['id'],
 		];
 		if ($response['valid'] == true) {
-			$this->update_user_image($response['id']);
+			$this->update_user_image($response['id'], false);
 		}
 		echo(json_encode($response));
 	}
-	
-	public function borrarUsuario(){
-			$mensaje = "";
-			$usuario = trim($this->input->post('id'));
-			if($usuario!=''){
-				$mensaje = $this->UsuariosModel->borrarUsuario($usuario);
-			}
-			else{
-				$mensaje = $this->errores['usuiv'];
-			}
-			$resp = array("msg"=>html_entity_decode($mensaje));
-			echo json_encode($resp);
+
+	private function upload_user_image() {
+		$path = './uploads/';
+		$this->load->library('upload');
+		$this->upload->initialize(array(
+			"upload_path"       =>  $path,
+			"allowed_types"     =>  "gif|jpg|png|jpeg|bmp|svg|ico",
+			"max_size"          =>  '20000000',
+			"max_width"         =>  '13684',
+			"max_height"        =>  '13684'
+		));
+		if($this->upload->do_upload('image')) {
+			$image = $this->upload->data();
+			$file_data = [
+				'file' => file_get_contents($image['full_path']),
+				'extension' => $image['file_ext']
+			];
+			$response = $this->upload_image($file_data);
+			unlink($image['full_path']);
+			return $response;
 		}
+		return '';
+	}
+
+	private function upload_image($file_data) {
+		$bucket_name = 'tuecofiles';
+		$file_name = $this->random_str(48) . $file_data['extension'];
+		$file_url = html_entity_decode('https://' . $bucket_name . '.s3.amazonaws.com/' . $file_name);
+		$s3 = new S3Client([
+			'version' => 'latest',
+			'region'  => 'us-east-2',
+			'credentials' => [
+				'key' => getenv('S3_KEY'),
+				'secret' => getenv('S3_SECRET')
+			]
+		]);
+		try {
+			$result = $s3->putObject([
+				'Bucket' => $bucket_name,
+				'Key'    => $file_name,
+				'ACL'    => 'public-read',
+				'Body'   => $file_data['file'],
+				//'SourceFile' => 'c:\samplefile.png' -- use this if you want to upload a file from a local location
+			]);
+			return $result['ObjectURL'];
+		} catch (S3Exception $e) {
+			echo $e->getMessage() . PHP_EOL;
+			return false;
+		}
+		return false;
+	}
+
+	public function borrarUsuario() {
+		$mensaje = "";
+		$usuario = trim($this->input->post('id'));
+		if($usuario!=''){
+			$mensaje = $this->UserModel->borrarUsuario($usuario);
+		}
+		else{
+			$mensaje = $this->errores['usuiv'];
+		}
+		$resp = array("msg"=>html_entity_decode($mensaje));
+		echo json_encode($resp);
+	}
 
 	public function login() {
 		ob_start( 'ob_gzhandler' );
@@ -147,7 +202,7 @@ class User extends CI_Controller {
 		$this->update_user_image($user_id);
 	}
 
-	private function update_user_image($user_id) {
+	private function update_user_image($user_id, $echo = true) {
 		$path = './uploads/';
 		$this->load->library('upload');
 		$this->upload->initialize(array(
@@ -170,7 +225,9 @@ class User extends CI_Controller {
 				http_response_code(500);
 			}
 			unlink($image['full_path']);
-			echo(json_encode($response));
+			if ($echo) {
+				echo(json_encode($response));
+			}
 		}
 	}
 
