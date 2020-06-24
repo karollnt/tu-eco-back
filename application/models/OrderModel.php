@@ -68,13 +68,14 @@ class OrderModel extends CI_Model {
 		$this->db
 			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, ' .
 				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, ' .
-				'us.direccion, ' .
+				'us.direccion, pf.nombre AS nombre_perfil, ' .
 				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, ' .
 				'dp.nombre AS departamento')
 			->from('solicitud sl')
 			->join("ciudades cd", "cd.id = sl.ciudades_id", "inner")
 			->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
 			->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
+			->join('perfil pf', 'us.id_perfil = pf.id', 'inner')
 			->join('usuario us2', 'sl.id_reciclatendero = us2.id', 'left')
 			->where(['sl.id_reciclatendero' => null]);
 		$res = $this->db->get();

@@ -67,8 +67,8 @@ CREATE TABLE IF NOT EXISTS `tueco`.`ciudades` (
   CONSTRAINT `fk_ciudades_departamento1`
     FOREIGN KEY (`id_departamento`)
     REFERENCES `tueco`.`departamento` (`iddepartamento`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -101,18 +101,18 @@ CREATE TABLE IF NOT EXISTS `tueco`.`usuario` (
   CONSTRAINT `fk_usuario_tipo_identidad`
     FOREIGN KEY (`id_tipo_identidad`)
     REFERENCES `tueco`.`tipo_identidad` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_usuario_perfil1`
     FOREIGN KEY (`id_perfil`)
     REFERENCES `tueco`.`perfil` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_usuario_ciudad1`
     FOREIGN KEY (`id_ciudad`)
     REFERENCES `tueco`.`ciudades` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -158,13 +158,13 @@ CREATE TABLE IF NOT EXISTS `tueco`.`categoria` (
   CONSTRAINT `fk_categoria_tipo_categoria1`
     FOREIGN KEY (`id_tipo`)
     REFERENCES `tueco`.`tipo_categoria` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_categoria_medida1`
     FOREIGN KEY (`id_medida`)
     REFERENCES `tueco`.`medida` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -204,23 +204,23 @@ CREATE TABLE IF NOT EXISTS `tueco`.`solicitud` (
   CONSTRAINT `fk_solicitud_usuario1`
     FOREIGN KEY (`id_solicitante`)
     REFERENCES `tueco`.`usuario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_solicitud_usuario2`
     FOREIGN KEY (`id_reciclatendero`)
     REFERENCES `tueco`.`usuario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_solicitud_ciudades1`
     FOREIGN KEY (`ciudades_id`)
     REFERENCES `tueco`.`ciudades` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_solicitud_estado_solicitud1`
     FOREIGN KEY (`id_estado_solicitud`)
     REFERENCES `tueco`.`estado_solicitud` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -241,13 +241,13 @@ CREATE TABLE IF NOT EXISTS `tueco`.`detalle_solicitud` (
   CONSTRAINT `fk_detalle_solicitud_solicitud1`
     FOREIGN KEY (`id_solicitud`)
     REFERENCES `tueco`.`solicitud` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_detalle_solicitud_categoria1`
     FOREIGN KEY (`id_categoria`)
     REFERENCES `tueco`.`categoria` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -280,13 +280,13 @@ CREATE TABLE IF NOT EXISTS `tueco`.`ruta` (
   CONSTRAINT `fk_ruta_usuario1`
     FOREIGN KEY (`id_reciclatendero`)
     REFERENCES `tueco`.`usuario` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_ruta_estado_ruta1`
     FOREIGN KEY (`id_estado`)
     REFERENCES `tueco`.`estado_ruta` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -305,13 +305,13 @@ CREATE TABLE IF NOT EXISTS `tueco`.`solicitudes_ruta` (
   CONSTRAINT `fk_solicitudes_ruta_ruta1`
     FOREIGN KEY (`id_ruta`)
     REFERENCES `tueco`.`ruta` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_solicitudes_ruta_solicitud1`
     FOREIGN KEY (`id_solicitud`)
     REFERENCES `tueco`.`solicitud` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
