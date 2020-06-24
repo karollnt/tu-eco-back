@@ -77,11 +77,12 @@ class Order extends CI_Controller {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
 		$user_id = $this->input->get('user_id');
+		$is_recycler = $this->input->get('is_recycler');
 		if (strcasecmp($user_id, '') === 0) {
 			http_response_code(400);
 			die(json_encode([]));
 		}
-		$orders = $this->OrderModel->get_user_orders($user_id);
+		$orders = $this->OrderModel->get_user_orders($user_id, strcasecmp('true', $is_recycler) == 0);
 		echo(json_encode($orders));
 	}
 

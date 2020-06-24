@@ -86,7 +86,11 @@ class OrderModel extends CI_Model {
 		return $orders;
 	}
 
-	public function get_user_orders($user_id) {
+	public function get_user_orders($user_id, $get_recycler = false) {
+		$where = ['sl.id_solicitante' => $user_id];
+		if ($get_recycler) {
+			$where = ['sl.id_reciclatendero' => $user_id];
+		}
 		$this->db
 			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, sl.fecha_recogida, ' .
 				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, ' .
@@ -96,7 +100,7 @@ class OrderModel extends CI_Model {
 			->join("departamento dp", "dp.iddepartamento = cd.id_departamento", "inner")
 			->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
 			->join('usuario us2', 'sl.id_reciclatendero = us2.id', 'left')
-			->where(['sl.id_solicitante' => $user_id])
+			->where($where)
 			->order_by('sl.fecha', 'DESC');
 		$res = $this->db->get();
 		$orders = [];
