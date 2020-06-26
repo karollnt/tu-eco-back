@@ -59,9 +59,26 @@ class RouteModel extends CI_Model {
 		$res = $this->db->get();
 		$routes = [];
 		foreach ($res->result() as $row) {
+			$row = (array)$row;
+			$row['tipo'] = $this->get_route_type($row['id']);
+			$row = (object)$row;
 			array_push($routes, $row);
 		}
 		return $routes;
+	}
+
+	public function get_route_type($route_id) {
+		$this->db->select('pf.nombre')
+		->from('ruta rt')
+		->join('solicitudes_ruta er', 'er.id_ruta = rt.id', 'inner')
+		->join('solicitud sl', 'er.id_solicitud = sl.id', 'inner')
+		->join('usuario us', 'sl.id_solicitante = us.id', 'inner')
+		->join('perfil pf', 'us.id_perfil = pf.id', 'inner')
+		->where(['rt.id' => $route_id]);
+		$res = $this->db->get();
+		foreach ($res->result() as $row) {
+			return $row->nombre;
+		}
 	}
 
 	public function get_date_routes($date) {
