@@ -27,8 +27,8 @@ class OrderModel extends CI_Model {
 	public function get_order_data($order_id) {
 		$this->db
 			->select('sl.id, sl.fecha, sl.id_solicitante, us.nombre AS nombre_cliente, us.apellido AS apellido_cliente, sl.fecha_recogida, ' .
-				'us.direccion, us.id_perfil, sl.id_estado_solicitud,' .
-				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, us2.foto,us2.placa, ' .
+				'us.direccion, us.id_perfil, sl.id_estado_solicitud, us.telefono, ' .
+				'sl.id_reciclatendero, us2.nombre AS nombre_recicla_tendero, us2.apellido AS apellido_recicla_tendero, us2.foto,us2.placa, us2.telefono AS telefono_empleado, ' .
 				'sl.comentario, sl.ciudades_id AS id_ciudad, cd.nombre AS ciudad, dp.iddepartamento AS id_departamento, dp.nombre AS departamento')
 			->from('solicitud sl')
 			->join("ciudades cd", "cd.id = sl.ciudades_id", "inner")
