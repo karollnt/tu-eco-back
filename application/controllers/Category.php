@@ -27,6 +27,7 @@ class Category extends CI_Controller {
 			'id_tipo' => trim($this->input->post('id_tipo')),
 			'id_medida' => trim($this->input->post('id_medida')),
 			'foto' => $foto,
+			'id_marca' => trim($this->input->post('id_marca')),
 		];
 		$response = [
 			'valid' => $this->CategoryModel->create_category($category_data)
@@ -45,21 +46,63 @@ class Category extends CI_Controller {
 		$category = $this->CategoryModel->get_category_details($category_id);
 		echo(json_encode(['category' => $category]));
 	}
-	
-	
-	public function borrar_categoria(){
-			$mensaje = "";
-			$id = $this->input->post('id');
-			$mensaje = $this->CategoryModel->borrar_categoria($id);
-			$resp = array("msg"=>html_entity_decode($mensaje));
-			echo json_encode($resp);
-		}
+
+	public function borrar_categoria() {
+		$mensaje = "";
+		$id = $this->input->post('id');
+		$mensaje = $this->CategoryModel->borrar_categoria($id);
+		$resp = array("msg"=>html_entity_decode($mensaje));
+		echo json_encode($resp);
+	}
+
+	public function create_brand() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$brand_data = [
+			'nombre' => trim($this->input->post('nombre'))
+		];
+		$response = $this->CategoryModel->create_brand($brand_data);
+		echo(json_encode($response));
+	}
+
+	public function create_measurement() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$measurement_data = [
+			'nombre' => trim($this->input->post('nombre'))
+		];
+		$response = $this->CategoryModel->create_measurement($measurement_data);
+		echo(json_encode($response));
+	}
+
+	public function get_brands() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$response = $this->CategoryModel->get_brands();
+		echo(json_encode($response));
+	}
 
 	public function get_measurements() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
 		$response = $this->CategoryModel->get_measurements();
 		echo(json_encode($response));
+	}
+
+	public function delete_measurement() {
+		$mensaje = "";
+		$id = $this->input->post('id');
+		$mensaje = $this->CategoryModel->delete_measurement($id);
+		$resp = array("msg"=>html_entity_decode($mensaje));
+		echo json_encode($resp);
+	}
+
+	public function delete_brand() {
+		$mensaje = "";
+		$id = $this->input->post('id');
+		$mensaje = $this->CategoryModel->delete_brand($id);
+		$resp = array("msg"=>html_entity_decode($mensaje));
+		echo json_encode($resp);
 	}
 
 	public function get_category_types() {
