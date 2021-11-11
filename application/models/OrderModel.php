@@ -50,11 +50,14 @@ class OrderModel extends CI_Model {
 
 	public function get_order_details($order_id) {
 		$this->db->select('ds.id, ds.valor, ds.cantidad, cg.nombre AS nombre_categoria, ' .
-			'cg.precio, tc.nombre AS nombre_tipo, md.nombre AS medida')
+			'cg.precio, tc.nombre AS nombre_tipo, md.nombre AS medida, ' .
+			'COALESCE(mc.nombre, "") AS nombre_marca, COALESCE(mc.id, 0) AS id_marca'
+		)
 		->from('detalle_solicitud ds')
 		->join("categoria cg", "cg.id = ds.id_categoria", "inner")
 		->join("tipo_categoria tc", "tc.id = cg.id_tipo", "inner")
 		->join("medida md", "md.id = cg.id_medida", "inner")
+		->join('marcas mc', 'mc.id = cg.id_marcas', 'left')
 		->where(['ds.id_solicitud' => $order_id]);
 		$res = $this->db->get();
 		$order_details = [];
