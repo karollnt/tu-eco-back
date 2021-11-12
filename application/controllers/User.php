@@ -299,9 +299,9 @@ class User extends CI_Controller {
 
 	private function send_reset_email($email, $token) {
 		$subject = 'Restablecer clave';
-		$from = 'noreply-tueco@yopmail.com';
+		$from = 'noreply-asfp@yopmail.com';
 		$link = 'https://tu-eco-back.herokuapp.com/user/reset_password/?token=' . $token;
-		$message = "Hola!<br>Puedes restablecer tu clave en el siguiente enlace:<br>{$link}";
+		$message = "Hola!<br>Puedes restablecer tu clave en <a href='{$link}' target='_blank'>este enlace</a>";
 		$api_key = getenv('sendgrid_api_key');
 		$curl = curl_init();
 
@@ -313,7 +313,7 @@ class User extends CI_Controller {
 			CURLOPT_TIMEOUT => 30,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"to\":[{\"email\":\"{$email}\"}],\"subject\":\"{$subject}\"}],\"from\":{\"email\":\"{$from}\",\"name\":\"Tu Eco\"},\"content\":[{\"type\":\"text/html\",\"value\":\"{$message}\"}]}",
+			CURLOPT_POSTFIELDS => "{\"personalizations\":[{\"to\":[{\"email\":\"{$email}\"}],\"subject\":\"{$subject}\"}],\"from\":{\"email\":\"{$from}\",\"name\":\"ASF Performance\"},\"content\":[{\"type\":\"text/html\",\"value\":\"{$message}\"}]}",
 			CURLOPT_HTTPHEADER => array(
 				"authorization: Bearer {$api_key}",
 				"content-type: application/json"
