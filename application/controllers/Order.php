@@ -73,6 +73,13 @@ class Order extends CI_Controller {
 		echo(json_encode($orders));
 	}
 
+	public function get_orders() {
+		ob_start( 'ob_gzhandler' );
+		header('Content-Type: application/json');
+		$orders = $this->OrderModel->get_orders();
+		echo(json_encode($orders));
+	}
+
 	public function get_user_orders() {
 		ob_start( 'ob_gzhandler' );
 		header('Content-Type: application/json');
